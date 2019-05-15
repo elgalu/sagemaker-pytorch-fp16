@@ -9,6 +9,10 @@ services:
 python:
   - "3.7"
 
+env:
+  global:
+    - CUDA_BASE_VER="10.1"
+
 install:
   - pip install --upgrade pip wheel
   - pip install torch torchvision fastai
@@ -29,9 +33,12 @@ jobs:
       script:
         - tox
 
-    - stage: build-push-base-image
+    - stage: base-build-push-image
       name: "Docker Build and Push the base image"
-      env:
-        - CUDA_BASE_VER="10.1"
       script:
-        - ./scripts/build-push-base-image.sh
+        - ./scripts/base-build-push-image.sh
+
+    - stage: final-build-push-image
+      name: "Docker Build and Push the base image"
+      script:
+        - ./scripts/final-build-push-image.sh

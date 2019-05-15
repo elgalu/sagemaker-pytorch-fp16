@@ -10,7 +10,7 @@ echoerr() { printf "%s\n" "$*" >&2; }
 die () {
   echoerr "ERROR: $1"
   # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "150"
-  errnum=${2-188}
+  errnum=${2-288}
   exit $errnum
 }
 
@@ -24,14 +24,14 @@ if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
 fi
 
 # Required env vars
-[ -z "${CUDA_BASE_VER}" ] && die "Need env var CUDA_BASE_VER"
+[ -z "${TRAVIS_BUILD_NUMBER}" ] && die "Need env var TRAVIS_BUILD_NUMBER"
 
 docker build -t local-build-image-name \
-  -f docker/1.1.0/base/Dockerfile.gpu \
-  --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} .
+  -f docker/1.1.0/final/Dockerfile.gpu \
+  --build-arg TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} .
 
 if [ "${TRAVIS_BUILD_NUMBER}" != "" ]; then
-  _target_repo="elgalu/pytorch-base-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}"
+  _target_repo="elgalu/pytorch-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}"
 
   # Let's push this image to re-use it in TravisCI stages
   # in order to speed up the build
@@ -43,5 +43,6 @@ if [ "${TRAVIS_BUILD_NUMBER}" != "" ]; then
   docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
   echo "Logged in to docker with user '${DOCKER_USERNAME}'"
 
+  # https://cloud.docker.com/repository/docker/elgalu/pytorch-1.1.0-gpu-py3/general
   docker push "${_target_repo}"
 fi
