@@ -25,8 +25,12 @@ jobs:
       name: "Tox Tests"
       script: tox
 
-    - stage: build-base
-      name: "Docker Build the base image"
+    - stage: build-push-base-image
+      name: "Docker Build and Push the base image"
       env:
         - CUDA_BASE_VER="10.1"
-      script: docker build -t pytorch-base:1.1.0-gpu-py3 -f docker/1.1.0/base/Dockerfile.gpu --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} .
+      script:
+        - docker build -t pytorch-base:1.1.0-gpu-py3 \
+            -f docker/1.1.0/base/Dockerfile.gpu \
+            --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} .
+        - echo "docker push ..."
