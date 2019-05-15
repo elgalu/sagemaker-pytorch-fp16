@@ -30,6 +30,7 @@ docker build -t local-build-image-name \
   -f docker/1.1.0/final/Dockerfile.gpu \
   --build-arg TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} .
 
+
 if [ "${TRAVIS_BUILD_NUMBER}" != "" ]; then
   _target_repo="elgalu/pytorch-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}"
 
