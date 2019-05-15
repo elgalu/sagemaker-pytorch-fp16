@@ -26,13 +26,15 @@ fi
 # Required env vars
 [ -z "${CUDA_BASE_VER}" ] && die "Need env var CUDA_BASE_VER"
 
+touch local_build.log
+
+( while true; do tail -n 20 local_build.log; sleep 60; done ) &
+
 # We need to send the output to a log file because Travis has a 10k log limit
 docker build -t local-build-image-name \
   -f docker/1.1.0/base/Dockerfile.gpu \
   --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} . \
   > local_build.log
-
-tail -n 100 local_build.log
 
 if [ "${TRAVIS_BUILD_NUMBER}" != "" ]; then
   _target_repo="elgalu/pytorch-base-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}"
