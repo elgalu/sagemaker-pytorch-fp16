@@ -1,5 +1,7 @@
-dist: xenial   # required for Python >= 3.7
 language: python
+
+os: linux
+dist: xenial   # required for Python >= 3.7
 
 services:
   - docker
@@ -19,18 +21,17 @@ jobs:
 
     - stage: "unit" # parallel
       name: "Unit Tests"
-      script: pytest test/unit
+      script:
+        - pytest test/unit
 
     - stage: "unit" # parallel
       name: "Tox Tests"
-      script: tox
+      script:
+        - tox
 
     - stage: build-push-base-image
       name: "Docker Build and Push the base image"
       env:
         - CUDA_BASE_VER="10.1"
       script:
-        - docker build -t pytorch-base:1.1.0-gpu-py3 \
-            -f docker/1.1.0/base/Dockerfile.gpu \
-            --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} .
-        - echo "docker push ..."
+        - ./scripts/build-push-base-image.sh
