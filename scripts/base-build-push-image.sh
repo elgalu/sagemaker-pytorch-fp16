@@ -28,7 +28,7 @@ fi
 
 touch local_build.log
 
-( while true; do tail -n 20 local_build.log; sleep 60; done ) &
+( while true; do tail -n 20 local_build.log; sleep 120; done ) &
 
 # We need to send the output to a log file because Travis has a 10k log limit
 docker build -t local-build-image-name \
