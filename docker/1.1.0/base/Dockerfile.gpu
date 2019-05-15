@@ -1,4 +1,4 @@
-# laptop time: 18min
+# laptop time: 18min + 14min
 ARG CUDA_BASE_VER="10.1"
 ARG LINUX_VERSION="ubuntu16.04"
 
@@ -142,3 +142,43 @@ RUN cd /tmp \
         'libpython3.5-minimal' \
         'libpython3.5-stdlib' \
   && echo "Done with CMake stage"
+
+RUN cd /tmp \
+  # Compile newer OpenBlas from source
+  && cd /tmp \
+  && _blas_commit="9208ab86036554d50fbf175a078603eab20fb42e" \
+  && git clone "https://github.com/xianyi/OpenBLAS" \
+  && cd OpenBLAS \
+  && git checkout "${_blas_commit}" -b local_build \
+  && git submodule update --init --recursive \
+  && make NO_AFFINITY=1 USE_OPENMP=1 \
+  && make install \
+  && cd /tmp \
+  && rm -rf /tmp/Open* \
+  && apt -qyy install --no-install-recommends \
+        'python3.7-dev' \
+  && apt -qqy autoremove \
+  && ln -s -f /usr/bin/python3.7 /usr/bin/python \
+  && python --version \
+  && python --version 2>&1 | grep "3\.7\.3" \
+  && nvcc --version \
+  && curl -O "https://bootstrap.pypa.io/get-pip.py" \
+  && python get-pip.py 'pip<=18.1' \
+  && rm get-pip.py \
+  && ln -s -f /usr/local/bin/pip /usr/bin/pip \
+  && ls -lah --color='always' /usr/bin/pip* \
+  && pip --version \
+  && pip --version 2>&1 | grep "python 3\.7" \
+  && pip install --no-cache-dir \
+        'torch==1.1.0' \
+        'torchvision==0.2.2' \
+        'Pillow==6.0.0' \
+        'retrying==1.3.3' \
+        'six==1.12.0' \
+        'fastai==1.0.52' \
+        'opencv-python>=4.0,<4.1' \
+  && pip install --no-cache-dir \
+        'pyarrow==0.13.0' \
+  && python -c 'import torch' \
+  && python -c 'import pyarrow' \
+  && echo "Done installing arrow"
