@@ -39,6 +39,6 @@ jobs:
         - ./scripts/base-build-push-image.sh
 
     - stage: final-build-push-image
-      name: "Docker Build and Push the base image"
+      name: "Docker Build and Push the final image"
       script:
         - ./scripts/final-build-push-image.sh
