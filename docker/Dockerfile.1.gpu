@@ -1,0 +1,49 @@
+ARG TRAVIS_BUILD_NUMBER="local"
+
+FROM elgalu/pytorch-base0-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}
+
+RUN cd /tmp \
+  # Apex is NVIDIA-maintained utilities to streamline
+  # mixed precision and distributed training in Pytorch
+  # https://github.com/nvidia/apex
+  && cd /tmp \
+  && python --version \
+  && python --version 2>&1 | grep "3\.7\.3" \
+  && pip --version \
+  && pip --version 2>&1 | grep "python 3\.7" \
+  && nvcc --version \
+  && _apex_commit="f2b3a62c8941027253b2decba96ba099f611387e" \
+  && curl -L -O "https://github.com/NVIDIA/apex/archive/${_apex_commit}.zip" \
+  && unzip -x "${_apex_commit}.zip" \
+  && cd "apex-${_apex_commit}" \
+  && pip install --no-cache-dir \
+        --global-option="--cpp_ext" \
+        --global-option="--cuda_ext" . \
+  && cd /tmp \
+  && rm -rf apex* *.zip \
+  && apt -qqy autoremove \
+  && echo "Apex: Check that everything is still there" \
+  && python --version \
+  && python --version 2>&1 | grep "3\.7\.3" \
+  && pip --version \
+  && pip --version 2>&1 | grep "python 3\.7" \
+  && nvcc --version \
+  && python -c 'import torch' \
+  && python -c 'import pyarrow' \
+  && python -c 'import apex' \
+  && echo "Done with Apex"
+
+RUN cd /tmp \
+  && echo "Final: Check that everything is still there" \
+  && python --version \
+  && python --version 2>&1 | grep "3\.7\.3" \
+  && pip --version \
+  && pip --version 2>&1 | grep "python 3\.7" \
+  && nvcc --version \
+  && pip show 'pyarrow' \
+  && pip show 'torch' \
+  && pip show 'apex' \
+  && python -c 'import pyarrow' \
+  && python -c 'import torch' \
+  && python -c 'import apex' \
+  && echo "Done with Final"

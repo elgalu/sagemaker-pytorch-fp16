@@ -15,10 +15,11 @@ This project is based on [sagemaker-pytorch-container](https://github.com/aws/sa
     pip install torch torchvision fastai
     pip install --upgrade pip wheel
 
-### Build the base image
+### Build the base images
 The "base" Dockerfile takes care of compiling all required up-to-date packages which is incredible time consuming.
 
-    docker build -t pytorch-base:1.1.0-gpu-py3 -f docker/1.1.0/base/Dockerfile.gpu --build-arg CUDA_BASE_VER=10.1 .
+    docker build -t elgalu/pytorch-base0-1.1.0-gpu-py3:local -f docker/Dockerfile.0.gpu .
+    docker build -t elgalu/pytorch-base1-1.1.0-gpu-py3:local -f docker/Dockerfile.1.gpu .
 
 ### Build the wheel
 The "final" Dockerfile encompass the installation of the SageMaker specific support code.
@@ -30,7 +31,7 @@ Change `AWS_ACCOUNT_NUMBER` accordingly.
 
     AWS_ACCOUNT_NUMBER=012345678901
     img="${AWS_ACCOUNT_NUMBER}.dkr.ecr.eu-central-1.amazonaws.com/sagemaker-pytorch-1.1.0-gpu-py3:cu101"
-    docker build -t ${img} -f docker/1.1.0/final/Dockerfile.gpu .
+    docker build -t ${img} -f docker/Dockerfile.2.gpu .
 
 ### Push the final image
 Change `AWS_ACCOUNT_NUMBER` accordingly.
@@ -59,7 +60,7 @@ You can use tox to run unit tests as well as flake8 and code coverage
 ### Local Integration Tests
 Required arguments for integration tests are found in test/conftest.py
 
-    pytest test/integration/local --docker-base-name=pytorch-base:1.1.0-gpu-py3 \
+    pytest test/integration/local --docker-base-name=pytorch-1:1.1.0-gpu-py3 \
                       --tag cu101 \
                       --py-version 3 \
                       --framework-version 1.1.0 \

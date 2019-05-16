@@ -12,6 +12,7 @@ python:
 env:
   global:
     - CUDA_BASE_VER="10.1"
+    - CUDA_BASE_VER_NO_DOTS="101"
 
 install:
   - pip install --upgrade pip wheel
@@ -33,12 +34,17 @@ jobs:
       script:
         - tox
 
-    - stage: base-build-push-image
-      name: "Docker Build and Push the base image"
+    - stage: 0-build-push-image
+      name: "Docker Build and Push the 0 base image"
       script:
-        - ./scripts/base-build-push-image.sh
+        - ./scripts/build-push-image.sh 0
+
+    - stage: 1-build-push-image
+      name: "Docker Build and Push the 1 base image"
+      script:
+        - ./scripts/build-push-image.sh 1
 
     - stage: final-build-push-image
       name: "Docker Build and Push the final image"
       script:
-        - ./scripts/final-build-push-image.sh
+        - ./scripts/build-push-image.sh 2
