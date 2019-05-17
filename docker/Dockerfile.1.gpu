@@ -5,8 +5,8 @@ FROM elgalu/pytorch-base0-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}
 # Upgrade PyTorch and compile with current CUDA version
 RUN cd /tmp \
   && _pytorch_commit="101176870ecea86f48ae1df4f2d919833e890854" \
-  && git clone "https://github.com/pytorch/pytorch" \
-  && cd pytorch \
+  # && git clone "https://github.com/pytorch/pytorch" \
+  # && cd pytorch \
   # && git checkout "${_pytorch_commit}" -b local_build \
   # && git submodule update --init --recursive \
   # && echo "Building PyTorch ... will take" \
