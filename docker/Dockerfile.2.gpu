@@ -4,65 +4,65 @@ FROM elgalu/pytorch-base1-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}
 
 LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true
 
-# Apex is NVIDIA-maintained utilities to streamline
-# mixed precision and distributed training in Pytorch
-# https://github.com/nvidia/apex
-RUN cd /tmp \
-  && cd /tmp \
-  && python --version \
-  && python --version 2>&1 | grep "3\.7\.3" \
-  && pip --version \
-  && pip --version 2>&1 | grep "python 3\.7" \
-  && nvcc --version \
-  && _apex_commit="f2b3a62c8941027253b2decba96ba099f611387e" \
-  && curl -L -O "https://github.com/NVIDIA/apex/archive/${_apex_commit}.zip" \
-  && unzip -x "${_apex_commit}.zip" \
-  && cd "apex-${_apex_commit}" \
-  && pip install --no-cache-dir \
-        --global-option="--cpp_ext" \
-        --global-option="--cuda_ext" . \
-  && cd /tmp \
-  && rm -rf apex* *.zip \
-  && apt -qqy autoremove \
-  && echo "Apex: Check that everything is still there" \
-  && python --version \
-  && python --version 2>&1 | grep "3\.7\.3" \
-  && pip --version \
-  && pip --version 2>&1 | grep "python 3\.7" \
-  && nvcc --version \
-  && python -c 'import torch' \
-  && python -c 'import pyarrow' \
-  && python -c 'import apex' \
-  && echo "Done with Apex"
+# # Apex is NVIDIA-maintained utilities to streamline
+# # mixed precision and distributed training in Pytorch
+# # https://github.com/nvidia/apex
+# RUN cd /tmp \
+#   && cd /tmp \
+#   && python --version \
+#   && python --version 2>&1 | grep "3\.7\.3" \
+#   && pip --version \
+#   && pip --version 2>&1 | grep "python 3\.7" \
+#   && nvcc --version \
+#   && _apex_commit="f2b3a62c8941027253b2decba96ba099f611387e" \
+#   && curl -L -O "https://github.com/NVIDIA/apex/archive/${_apex_commit}.zip" \
+#   && unzip -x "${_apex_commit}.zip" \
+#   && cd "apex-${_apex_commit}" \
+#   && pip install --no-cache-dir \
+#         --global-option="--cpp_ext" \
+#         --global-option="--cuda_ext" . \
+#   && cd /tmp \
+#   && rm -rf apex* *.zip \
+#   && apt -qqy autoremove \
+#   && echo "Apex: Check that everything is still there" \
+#   && python --version \
+#   && python --version 2>&1 | grep "3\.7\.3" \
+#   && pip --version \
+#   && pip --version 2>&1 | grep "python 3\.7" \
+#   && nvcc --version \
+#   && python -c 'import torch' \
+#   && python -c 'import pyarrow' \
+#   && python -c 'import apex' \
+#   && echo "Done with Apex"
 
-RUN cd /tmp \
-  && echo "Final: Check that everything is still there" \
-  && python --version \
-  && python --version 2>&1 | grep "3\.7\.3" \
-  && pip --version \
-  && pip --version 2>&1 | grep "python 3\.7" \
-  && nvcc --version \
-  && pip show 'pyarrow' \
-  && pip show 'torch' \
-  && pip show 'apex' \
-  && python -c 'import pyarrow' \
-  && python -c 'import torch' \
-  && python -c 'import apex' \
-  && echo "Done with Final"
+# RUN cd /tmp \
+#   && echo "Final: Check that everything is still there" \
+#   && python --version \
+#   && python --version 2>&1 | grep "3\.7\.3" \
+#   && pip --version \
+#   && pip --version 2>&1 | grep "python 3\.7" \
+#   && nvcc --version \
+#   && pip show 'pyarrow' \
+#   && pip show 'torch' \
+#   && pip show 'apex' \
+#   && python -c 'import pyarrow' \
+#   && python -c 'import torch' \
+#   && python -c 'import apex' \
+#   && echo "Done with Final"
 
-# Copy workaround script for incorrect hostname
-COPY lib/changehostname.c /
-COPY lib/start_with_right_hostname.sh /usr/local/bin/start_with_right_hostname.sh
-RUN chmod +x /usr/local/bin/start_with_right_hostname.sh
+# # Copy workaround script for incorrect hostname
+# COPY lib/changehostname.c /
+# COPY lib/start_with_right_hostname.sh /usr/local/bin/start_with_right_hostname.sh
+# RUN chmod +x /usr/local/bin/start_with_right_hostname.sh
 
-COPY dist/sagemaker_pytorch_container-1.1-py2.py3-none-any.whl /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl
-RUN pip install --no-cache-dir /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl && \
-    rm /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl
+# COPY dist/sagemaker_pytorch_container-1.1-py2.py3-none-any.whl /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl
+# RUN pip install --no-cache-dir /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl && \
+#     rm /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl
 
-ENV SAGEMAKER_TRAINING_MODULE sagemaker_pytorch_container.training:main
-ENV SAGEMAKER_SERVING_MODULE sagemaker_pytorch_container.serving:main
+# ENV SAGEMAKER_TRAINING_MODULE sagemaker_pytorch_container.training:main
+# ENV SAGEMAKER_SERVING_MODULE sagemaker_pytorch_container.serving:main
 
-WORKDIR /
+# WORKDIR /
 
-# Starts framework
-ENTRYPOINT ["bash", "-m", "start_with_right_hostname.sh"]
+# # Starts framework
+# ENTRYPOINT ["bash", "-m", "start_with_right_hostname.sh"]
