@@ -1,100 +1,66 @@
+default_steps: &default_steps
+  - checkout
+
+  - restore_cache:
+      keys:
+        - v1-dependencies-{{ checksum "setup.py" }}
+        - v1-dependencies-
+
+  - run:
+      name: install dependencies
+      command: |
+        python3 -m venv venv
+        . venv/bin/activate
+        pip install --upgrade pip wheel
+        pip install torch torchvision fastai
+        pip install -e .[test]
+        python setup.py bdist_wheel
+        pip install -e .
+
+  - save_cache:
+      paths:
+        - ./venv
+      key: v1-dependencies-{{ checksum "setup.py" }}
+
+  - setup_remote_docker:
+      docker_layer_caching: true
+
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 version: 2.1
 jobs:
   base0:
     docker:
       - image: circleci/python:3.7.3
-
-    resource_class: xlarge
     working_directory: ~/repo
-
     steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "setup.py" }}
-            - v1-dependencies-
-
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip wheel
-            pip install torch torchvision fastai
-            pip install -e .[test]
-            python setup.py bdist_wheel
-            pip install -e .
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "setup.py" }}
-
-      - run:
-          name: "Unit Tests"
-          command: |
-            . venv/bin/activate
-            pytest test/unit
-
-      - setup_remote_docker:
-          docker_layer_caching: true
-
+      <<: *default_steps
       - run:
           name: "Docker Build and Push the 0 base image"
           environment:
             CUDA_BASE_VER: "10.1"
             CUDA_BASE_VER_NO_DOTS: "101"
           # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+          #  export TRAVIS_BUILD_NUMBER="${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}"
           command: |
             set -x
-            export TRAVIS_BUILD_NUMBER="${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}"
+            export TRAVIS_BUILD_NUMBER="latest"
             ./scripts/build-push-image.sh 0
 
   base1:
     docker:
       - image: circleci/python:3.7.3
-
-    resource_class: xlarge
     working_directory: ~/repo
-
+    resource_class: xlarge
     steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "setup.py" }}
-            - v1-dependencies-
-
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip wheel
-            pip install torch torchvision fastai
-            pip install -e .[test]
-            python setup.py bdist_wheel
-            pip install -e .
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "setup.py" }}
-
-      - setup_remote_docker:
-          docker_layer_caching: true
-
+      <<: *default_steps
       - run:
           name: "Docker Build and Push the 1 base image"
           environment:
             CUDA_BASE_VER: "10.1"
             CUDA_BASE_VER_NO_DOTS: "101"
-          # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+            TRAVIS_BUILD_NUMBER: "latest"
           command: |
             set -x
-            export TRAVIS_BUILD_NUMBER="latest"
             ./scripts/build-push-image.sh 1
 
       - run:
@@ -102,10 +68,9 @@ jobs:
           environment:
             CUDA_BASE_VER: "10.1"
             CUDA_BASE_VER_NO_DOTS: "101"
-          # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+            TRAVIS_BUILD_NUMBER: "latest"
           command: |
             set -x
-            export TRAVIS_BUILD_NUMBER="latest"
             ./scripts/build-push-image.sh 2
 
 workflows:
