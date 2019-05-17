@@ -42,9 +42,12 @@ jobs:
 
       - run:
           name: "Docker Build and Push the 0 base image"
+          environment:
+            CUDA_BASE_VER: "10.1"
+            CUDA_BASE_VER_NO_DOTS: "101"
           # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
-          # environment:
-          #   TRAVIS_BUILD_NUMBER: {{ .Environment.CIRCLE_JOB }}
           command: |
             set -x
+            export TRAVIS_BUILD_NUMBER="${CIRCLE_JOB}"
+            env | grep CIRCLE
             ./scripts/build-push-image.sh 0
