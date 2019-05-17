@@ -36,9 +36,8 @@ else
   _target_repo="elgalu/pytorch-base${BUILD_LEVEL}-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}"
 fi
 
-touch local_build.log
-
-( while true; do tail -n 20 local_build.log; sleep 120; done ) &
+# touch local_build.log
+# ( while true; do tail -n 20 local_build.log; sleep 120; done ) &
 
 # We need to send the output to a log file because Travis has a 10k log limit
 docker build -t "${_target_repo}" \
@@ -46,7 +45,7 @@ docker build -t "${_target_repo}" \
   --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} \
   --build-arg CUDA_BASE_VER_NO_DOTS=${CUDA_BASE_VER_NO_DOTS} \
   --build-arg TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} \
-  . > local_build.log
+  . # > local_build.log
 
 # Let's push this image to re-use it in TravisCI stages
 # in order to speed up the build
@@ -56,7 +55,7 @@ docker build -t "${_target_repo}" \
 docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
 echo "Logged in to docker with user '${DOCKER_USERNAME}'"
 
-tail -n 20 local_build.log
+# tail -n 20 local_build.log
 
 # https://cloud.docker.com/repository/docker/elgalu/pytorch-base-1.1.0-gpu-py3/general
 docker push "${_target_repo}"
