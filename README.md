@@ -8,7 +8,8 @@ This project is based on [sagemaker-pytorch-container](https://github.com/aws/sa
 
 ### Prerequisites
 + Up-to-date docker version
-+
++ Code compatible with latest PyTorch
++ Amazon SageMaker account
 
 ### Setup
     pip install -e .[test]

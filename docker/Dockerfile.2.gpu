@@ -4,17 +4,31 @@ FROM elgalu/pytorch-base1-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}
 
 LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true
 
+# Upgrade PyTorch and compile with current CUDA version
+RUN cd /tmp \
+  && _pytorch_commit="79c5dc313cd7332489a22fa4a6026c9501a2a55c" \
+  && git clone "https://github.com/pytorch/pytorch" \
+  && cd pytorch \
+  && git checkout "${_pytorch_commit}" -b local_build \
+  && git submodule update --init --recursive \
+  && echo "Continue building PyTorch ..." \
+  && python setup.py install \
+  && cd /tmp \
+  && rm -rf /tmp/py* \
+  && python -c 'import torch' \
+  && python -c 'import pyarrow' \
+  && echo "Done building pytorch"
+
 # Apex is NVIDIA-maintained utilities to streamline
 # mixed precision and distributed training in Pytorch
 # https://github.com/nvidia/apex
 RUN cd /tmp \
-  && cd /tmp \
   && python --version \
   && python --version 2>&1 | grep "3\.7\.3" \
   && pip --version \
   && pip --version 2>&1 | grep "python 3\.7" \
   && nvcc --version \
-  && _apex_commit="f2b3a62c8941027253b2decba96ba099f611387e" \
+  && _apex_commit="4d325d2f25ec0c6a1e649ee2fee2170972f32c0a" \
   && curl -L -O "https://github.com/NVIDIA/apex/archive/${_apex_commit}.zip" \
   && unzip -x "${_apex_commit}.zip" \
   && cd "apex-${_apex_commit}" \
