@@ -37,8 +37,8 @@ jobs:
             . venv/bin/activate
             pytest test/unit
 
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
+      - setup_remote_docker:
+          docker_layer_caching: true
 
       # - run:
       #     name: "Docker Build and Push the 0 base image"
