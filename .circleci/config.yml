@@ -52,6 +52,15 @@ jobs:
             . venv/bin/activate
             tox
 
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run:
+          name: "Docker Build and Push the 0 base image"
+          command: |
+            set -x
+            ./scripts/build-push-image.sh 0
+
       # - store_artifacts:
       #     path: test-reports
       #     destination: test-reports
