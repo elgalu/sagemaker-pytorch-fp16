@@ -47,12 +47,13 @@ docker build -t "${_target_repo}" \
   --build-arg TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} \
   . # > local_build.log
 
+set +x
+
 # Let's push this image to re-use it in TravisCI stages
 # in order to speed up the build
 [ "${DOCKER_USERNAME}" == "" ] && die "Need env var DOCKER_USERNAME to push to docker"
 [ "${DOCKER_PASSWORD}" == "" ] && die "Need env var DOCKER_PASSWORD to push to docker"
 
-set +x
 echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
 echo "Logged in to docker with user '${DOCKER_USERNAME}'"
 # set -x: print each command right before it is executed

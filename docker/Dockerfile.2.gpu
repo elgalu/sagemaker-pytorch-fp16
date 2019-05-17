@@ -10,13 +10,14 @@ COPY lib/start_with_right_hostname.sh /usr/local/bin/start_with_right_hostname.s
 RUN chmod +x /usr/local/bin/start_with_right_hostname.sh
 
 COPY dist/sagemaker_pytorch_container-1.1-py2.py3-none-any.whl /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl
-RUN pip install --no-cache-dir /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl && \
-    rm /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl
+RUN echo "testfinal"
+# RUN pip install --no-cache-dir /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl && \
+#     rm /sagemaker_pytorch_container-1.1-py2.py3-none-any.whl
 
-ENV SAGEMAKER_TRAINING_MODULE sagemaker_pytorch_container.training:main
-ENV SAGEMAKER_SERVING_MODULE sagemaker_pytorch_container.serving:main
+# ENV SAGEMAKER_TRAINING_MODULE sagemaker_pytorch_container.training:main
+# ENV SAGEMAKER_SERVING_MODULE sagemaker_pytorch_container.serving:main
 
-WORKDIR /
+# WORKDIR /
 
-# Starts framework
-ENTRYPOINT ["bash", "-m", "start_with_right_hostname.sh"]
+# # Starts framework
+# ENTRYPOINT ["bash", "-m", "start_with_right_hostname.sh"]
