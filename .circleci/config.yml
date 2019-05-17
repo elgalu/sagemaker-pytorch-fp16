@@ -3,25 +3,16 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.7.3-browsers`
       - image: circleci/python:3.7.3
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
 
     working_directory: ~/repo
 
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "setup.py" }}
-            # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
       - run:
@@ -46,21 +37,14 @@ jobs:
             . venv/bin/activate
             pytest test/unit
 
-      - run:
-          name: "Tox Tests"
-          command: |
-            . venv/bin/activate
-            tox
+      # - setup_remote_docker:
+      #     docker_layer_caching: true
 
-      - setup_remote_docker:
-          docker_layer_caching: true
-
-      - run:
-          name: "Docker Build and Push the 0 base image"
-          command: |
-            set -x
-            ./scripts/build-push-image.sh 0
-
-      # - store_artifacts:
-      #     path: test-reports
-      #     destination: test-reports
+      # - run:
+      #     name: "Docker Build and Push the 0 base image"
+      #     # https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
+      #     environment:
+      #       TRAVIS_BUILD_NUMBER: {{ .Environment.CIRCLE_JOB }}
+      #     command: |
+      #       set -x
+      #       ./scripts/build-push-image.sh 0
