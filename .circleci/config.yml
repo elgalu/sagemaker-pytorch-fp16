@@ -47,3 +47,4 @@ jobs:
           #   TRAVIS_BUILD_NUMBER: {{ .Environment.CIRCLE_JOB }}
           command: |
             set -x
+            ./scripts/build-push-image.sh 0
