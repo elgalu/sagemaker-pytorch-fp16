@@ -53,7 +53,7 @@ docker build -t "${_target_repo}" \
 [ "${DOCKER_PASSWORD}" == "" ] && die "Need env var DOCKER_PASSWORD to push to docker"
 
 set +x
-docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
 echo "Logged in to docker with user '${DOCKER_USERNAME}'"
 # set -x: print each command right before it is executed
 set -xe
