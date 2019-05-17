@@ -34,17 +34,17 @@ jobs:
       script:
         - tox
 
-    - stage: 0-build-push-image
-      name: "Docker Build and Push the 0 base image"
-      script:
-        - ./scripts/build-push-image.sh 0
+    # - stage: 0-build-push-image
+    #   name: "Docker Build and Push the 0 base image"
+    #   script:
+    #     - ./scripts/build-push-image.sh 0
 
-    - stage: 1-build-push-image
-      name: "Docker Build and Push the 1 base image"
-      script:
-        - ./scripts/build-push-image.sh 1
+    # - stage: 1-build-push-image
+    #   name: "Docker Build and Push the 1 base image"
+    #   script:
+    #     - ./scripts/build-push-image.sh 1
 
-    - stage: final-build-push-image
-      name: "Docker Build and Push the final image"
-      script:
-        - ./scripts/build-push-image.sh 2
+    # - stage: final-build-push-image
+    #   name: "Docker Build and Push the final image"
+    #   script:
+    #     - ./scripts/build-push-image.sh 2

@@ -52,8 +52,11 @@ docker build -t "${_target_repo}" \
 [ "${DOCKER_USERNAME}" == "" ] && die "Need env var DOCKER_USERNAME to push to docker"
 [ "${DOCKER_PASSWORD}" == "" ] && die "Need env var DOCKER_PASSWORD to push to docker"
 
+set +x
 docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
 echo "Logged in to docker with user '${DOCKER_USERNAME}'"
+# set -x: print each command right before it is executed
+set -xe
 
 # tail -n 20 local_build.log
 

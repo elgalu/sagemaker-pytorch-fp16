@@ -49,7 +49,6 @@ jobs:
           command: |
             set -x
             export TRAVIS_BUILD_NUMBER="${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}"
-            env | grep USERNAME
             ./scripts/build-push-image.sh 0
 
       - run:

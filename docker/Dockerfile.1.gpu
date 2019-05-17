@@ -2,10 +2,10 @@ ARG TRAVIS_BUILD_NUMBER="local"
 
 FROM elgalu/pytorch-base0-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}
 
+# Apex is NVIDIA-maintained utilities to streamline
+# mixed precision and distributed training in Pytorch
+# https://github.com/nvidia/apex
 RUN cd /tmp \
-  # Apex is NVIDIA-maintained utilities to streamline
-  # mixed precision and distributed training in Pytorch
-  # https://github.com/nvidia/apex
   && cd /tmp \
   && python --version \
   && python --version 2>&1 | grep "3\.7\.3" \
