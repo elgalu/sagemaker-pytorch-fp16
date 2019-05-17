@@ -2,4 +2,24 @@ ARG TRAVIS_BUILD_NUMBER="local"
 
 FROM elgalu/pytorch-base0-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}
 
-RUN echo "test1"
+RUN cd /tmp \
+  # Upgrade PyTorch and compile with current CUDA version
+  && _pytorch_commit="101176870ecea86f48ae1df4f2d919833e890854" \
+  && git clone "https://github.com/pytorch/pytorch" \
+  && cd pytorch \
+  && git checkout "${_pytorch_commit}" -b local_build \
+  && git submodule update --init --recursive \
+  && echo "Building PyTorch ... will take" \
+  && python setup.py install \
+  && cd /tmp \
+  && rm -rf /tmp/py* \
+  && python -c 'import torch' \
+  && python -c 'import pyarrow' \
+  && echo "Done building pytorch"
+
+# RUN cd /tmp \
+#   && pip install --no-cache-dir \
+#         'https://download.pytorch.org/whl/cu101/torch-1.1.0-cp37-cp37m-linux_x86_64.whl' \
+#   && python -c 'import torch' \
+#   && python -c 'import pyarrow' \
+#   && echo "Done installing pytorch"
