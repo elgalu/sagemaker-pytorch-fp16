@@ -9,8 +9,8 @@ RUN cd /tmp \
   && cd pytorch \
   && git checkout "${_pytorch_commit}" -b local_build \
   && git submodule update --init --recursive \
-  && echo "Building PyTorch ... with a timeout limit" \
-  && timeout --foreground 4h python setup.py install \
+  && echo "Building PyTorch ... with a timeout limit around 77%" \
+  && timeout --foreground 270m python setup.py install \
        || echo "Timeout out but will continue on the next stage" \
   && echo "Will continue building on the next stage"
 

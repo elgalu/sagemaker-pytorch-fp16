@@ -6,12 +6,8 @@ LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true
 
 # Upgrade PyTorch and compile with current CUDA version
 RUN cd /tmp \
-  && _pytorch_commit="79c5dc313cd7332489a22fa4a6026c9501a2a55c" \
-  && git clone "https://github.com/pytorch/pytorch" \
-  && cd pytorch \
-  && git checkout "${_pytorch_commit}" -b local_build \
-  && git submodule update --init --recursive \
   && echo "Continue building PyTorch ..." \
+  && cd /tmp/pytorch \
   && python setup.py install \
   && cd /tmp \
   && rm -rf /tmp/py* \
