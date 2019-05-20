@@ -17,7 +17,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            pyenv versions
+            pyenv install 3.7.3
             pyenv global 3.7.3
             python3 -m venv venv
             . venv/bin/activate
