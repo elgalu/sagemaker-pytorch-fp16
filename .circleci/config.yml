@@ -24,9 +24,14 @@ jobs:
             sudo apt -qyy update || true
             sudo apt -qyy install --no-install-recommends 'python3.7-dev'
             sudo ln -s -f /usr/bin/python3.7 /usr/bin/python
-            cd /opt/circleci/.pyenv/plugins/python-build/../.. && git pull && cd -
-            pyenv install 3.7.3
-            pyenv global 3.7.3
+            python --version
+            python --version 2>&1 | grep "3\.7\.3"
+            curl -O "https://bootstrap.pypa.io/get-pip.py"
+            python get-pip.py
+            rm get-pip.py
+            sudo ln -s -f /usr/local/bin/pip /usr/bin/pip
+            pip --version
+            pip --version 2>&1 | grep "python 3\.7"
 
       - run:
           name: install dependencies
