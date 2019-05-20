@@ -17,10 +17,11 @@ jobs:
       - run:
           name: "Upgrade Python"
           command: |
-            sudo apt -qyy update
+            set -xe
+            sudo apt -qyy update || true
             sudo apt-get install -y --no-install-recommends software-properties-common
             sudo add-apt-repository ppa:deadsnakes/ppa -y
-            sudo apt -qyy update
+            sudo apt -qyy update || true
             sudo apt -qyy install --no-install-recommends 'python3.7-dev'
             sudo ln -s -f /usr/bin/python3.7 /usr/bin/python
             python --version
