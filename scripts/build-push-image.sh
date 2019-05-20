@@ -63,3 +63,5 @@ set -xe
 
 # https://cloud.docker.com/repository/docker/elgalu/pytorch-base-1.1.0-gpu-py3/general
 docker push "${_target_repo}"
+
+docker images
