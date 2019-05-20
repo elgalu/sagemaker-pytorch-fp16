@@ -2,8 +2,9 @@
 version: 2.1
 jobs:
   base0:
-    docker:
-      - image: circleci/python:3.7.3
+    machine:
+      enabled: true
+      image: circleci/classic:edge
     working_directory: ~/repo
     steps:
       - checkout
@@ -32,11 +33,11 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
 
-      - run:
-          name: "Set docker daemon to experimental"
-          command: |
-            sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
-            sudo service docker restart
+      # - run:
+      #     name: "Set docker daemon to experimental"
+      #     command: |
+      #       sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
+      #       sudo service docker restart
 
       - run:
           name: "Docker Build and Push the 0 base image"
@@ -51,8 +52,9 @@ jobs:
             ./scripts/build-push-image.sh 0
 
   base1:
-    docker:
-      - image: circleci/python:3.7.3
+    machine:
+      enabled: true
+      image: circleci/classic:edge
     working_directory: ~/repo
     resource_class: xlarge
     steps:
@@ -82,11 +84,11 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
 
-      - run:
-          name: "Set docker daemon to experimental"
-          command: |
-            sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
-            sudo service docker restart
+      # - run:
+      #     name: "Set docker daemon to experimental"
+      #     command: |
+      #       sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
+      #       sudo service docker restart
 
       - run:
           name: "Docker Build and Push the 1 base image"
@@ -99,8 +101,9 @@ jobs:
             ./scripts/build-push-image.sh 1
 
   final:
-    docker:
-      - image: circleci/python:3.7.3
+    machine:
+      enabled: true
+      image: circleci/classic:edge
     working_directory: ~/repo
     steps:
       - checkout
@@ -129,11 +132,11 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
 
-      - run:
-          name: "Set docker daemon to experimental"
-          command: |
-            sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
-            sudo service docker restart
+      # - run:
+      #     name: "Set docker daemon to experimental"
+      #     command: |
+      #       sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
+      #       sudo service docker restart
 
       - run:
           name: "Docker Build and Push the final image"
