@@ -18,11 +18,18 @@ jobs:
           name: "Upgrade Python"
           command: |
             sudo apt -qyy update
-            sudo apt -qyy install \
-                build-essential libssl-dev zlib1g-dev \
-                libncurses5-dev libncursesw5-dev libreadline-dev \
-                libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev \
-                libexpat1-dev liblzma-dev tk-dev libffi-dev
+            sudo apt -qyy install --no-install-recommends 'python3.7-dev'
+            sudo ln -s -f /usr/bin/python3.7 /usr/bin/python
+            python --version
+            python --version 2>&1 | grep "3\.7\.3"
+            nvcc --version
+            curl -O "https://bootstrap.pypa.io/get-pip.py"
+            python get-pip.py
+            rm get-pip.py
+            sudo ln -s -f /usr/local/bin/pip /usr/bin/pip
+            ls -lah --color='always' /usr/bin/pip*
+            pip --version
+            pip --version 2>&1 | grep "python 3\.7"
             cd /opt/circleci/.pyenv/plugins/python-build/../.. && git pull && cd -
             pyenv install 3.7.3
             pyenv global 3.7.3
