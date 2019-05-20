@@ -9,44 +9,6 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "setup.py" }}
-            - v1-dependencies-
-
-      - run:
-          name: "Upgrade Python"
-          command: |
-            set -xe
-            sudo apt -qyy update || true
-            sudo apt-get install -y --no-install-recommends software-properties-common
-            sudo add-apt-repository ppa:deadsnakes/ppa -y
-            sudo apt -qyy update || true
-            sudo apt -qyy install --no-install-recommends 'python3.7-dev'
-            sudo ln -s -f /usr/bin/python3.7 /usr/bin/python
-            python --version
-            curl -O "https://bootstrap.pypa.io/get-pip.py"
-            python get-pip.py
-            rm get-pip.py
-
-      - run:
-          name: install dependencies
-          command: |
-            python --version
-            pip install --upgrade pip wheel
-            pip install torch torchvision fastai
-            pip install -e .[test]
-            python setup.py bdist_wheel
-            pip install -e .
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "setup.py" }}
-
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
-
       # - run:
       #     name: "Set docker daemon to experimental"
       #     command: |
@@ -74,34 +36,6 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "setup.py" }}
-            - v1-dependencies-
-
-      - run:
-          name: install dependencies
-          command: |
-            pip install --upgrade pip wheel
-            pip install torch torchvision fastai
-            pip install -e .[test]
-            python setup.py bdist_wheel
-            pip install -e .
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "setup.py" }}
-
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
-
-      # - run:
-      #     name: "Set docker daemon to experimental"
-      #     command: |
-      #       sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
-      #       sudo service docker restart
-
       - run:
           name: "Docker Build and Push the 1 base image"
           environment:
@@ -119,34 +53,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "setup.py" }}
-            - v1-dependencies-
-
-      - run:
-          name: install dependencies
-          command: |
-            pip install --upgrade pip wheel
-            pip install torch torchvision fastai
-            pip install -e .[test]
-            python setup.py bdist_wheel
-            pip install -e .
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "setup.py" }}
-
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
-
-      # - run:
-      #     name: "Set docker daemon to experimental"
-      #     command: |
-      #       sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
-      #       sudo service docker restart
 
       - run:
           name: "Docker Build and Push the final image"
