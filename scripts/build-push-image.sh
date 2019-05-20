@@ -40,7 +40,7 @@ fi
 # ( while true; do tail -n 20 local_build.log; sleep 120; done ) &
 
 # We need to send the output to a log file because Travis has a 10k log limit
-docker build -t "${_target_repo}" \
+docker build --squash -t "${_target_repo}" \
   -f "docker/Dockerfile.${BUILD_LEVEL}.gpu" \
   --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} \
   --build-arg CUDA_BASE_VER_NO_DOTS=${CUDA_BASE_VER_NO_DOTS} \
