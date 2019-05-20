@@ -17,6 +17,12 @@ jobs:
       - run:
           name: "Upgrade Python"
           command: |
+            sudo apt -qyy update
+            sudo apt -qyy install \
+                build-essential libssl-dev zlib1g-dev \
+                libncurses5-dev libncursesw5-dev libreadline-dev \
+                libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev \
+                libexpat1-dev liblzma-dev tk-dev libffi-dev
             cd /opt/circleci/.pyenv/plugins/python-build/../.. && git pull && cd -
             pyenv install 3.7.3
             pyenv global 3.7.3
