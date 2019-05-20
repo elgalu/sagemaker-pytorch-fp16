@@ -15,10 +15,15 @@ jobs:
             - v1-dependencies-
 
       - run:
-          name: install dependencies
+          name: "Upgrade Python"
           command: |
+            cd /opt/circleci/.pyenv/plugins/python-build/../.. && git pull && cd -
             pyenv install 3.7.3
             pyenv global 3.7.3
+
+      - run:
+          name: install dependencies
+          command: |
             python3 -m venv venv
             . venv/bin/activate
             pip install --upgrade pip wheel
@@ -70,7 +75,6 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            pyenv global 3.7.3
             python3 -m venv venv
             . venv/bin/activate
             pip install --upgrade pip wheel
@@ -119,7 +123,6 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            pyenv global 3.7.3
             python3 -m venv venv
             . venv/bin/activate
             pip install --upgrade pip wheel
