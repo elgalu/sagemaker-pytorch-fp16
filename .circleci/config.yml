@@ -24,6 +24,7 @@ jobs:
             sudo apt -qyy update || true
             sudo apt -qyy install --no-install-recommends 'python3.7-dev'
             sudo ln -s -f /usr/bin/python3.7 /usr/bin/python
+            python --version
             curl -O "https://bootstrap.pypa.io/get-pip.py"
             python get-pip.py
             rm get-pip.py
@@ -31,8 +32,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
+            python --version
             pip install --upgrade pip wheel
             pip install torch torchvision fastai
             pip install -e .[test]
@@ -82,8 +82,6 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
             pip install --upgrade pip wheel
             pip install torch torchvision fastai
             pip install -e .[test]
@@ -130,8 +128,6 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
             pip install --upgrade pip wheel
             pip install torch torchvision fastai
             pip install -e .[test]
