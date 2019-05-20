@@ -33,6 +33,12 @@ jobs:
           docker_layer_caching: true
 
       - run:
+          name: "Set docker daemon to experimental"
+          command: |
+            sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
+            sudo service docker restart
+
+      - run:
           name: "Docker Build and Push the 0 base image"
           environment:
             CUDA_BASE_VER: "10.1"
@@ -77,6 +83,12 @@ jobs:
           docker_layer_caching: true
 
       - run:
+          name: "Set docker daemon to experimental"
+          command: |
+            sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
+            sudo service docker restart
+
+      - run:
           name: "Docker Build and Push the 1 base image"
           environment:
             CUDA_BASE_VER: "10.1"
@@ -116,6 +128,12 @@ jobs:
 
       - setup_remote_docker:
           docker_layer_caching: true
+
+      - run:
+          name: "Set docker daemon to experimental"
+          command: |
+            sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
+            sudo service docker restart
 
       - run:
           name: "Docker Build and Push the final image"
