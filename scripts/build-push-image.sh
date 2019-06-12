@@ -61,7 +61,8 @@ set -xe
 
 # tail -n 20 local_build.log
 
-# https://cloud.docker.com/repository/docker/elgalu/pytorch-base-1.1.0-gpu-py2/general
+# https://cloud.docker.com/repository/docker/elgalu/pytorch-1.1.0-gpu-py2/collaborators
+# https://cloud.docker.com/repository/docker/elgalu/pytorch-1.1.0-gpu-py3/collaborators
 docker push "${_target_repo}"
 
 docker images
