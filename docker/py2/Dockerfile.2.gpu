@@ -135,10 +135,17 @@ RUN cd /tmp \
   && pip --version \
   && pip --version 2>&1 | grep "python 2\.7" \
   && rm /usr/bin/python \
-  && rm /usr/local/bin/pip \
+  && rm -f /usr/local/bin/pip \
+  && rm -f /usr/bin/pip \
   && ln -s /miniconda/bin/python2.7 /usr/bin/python \
   && ln -s /miniconda/bin/pip /usr/local/bin/pip \
+  && ln -s /miniconda/bin/pip /usr/bin/pip \
+  && python --version \
+  && python --version 2>&1 | grep "2\.7\.16" \
+  && pip --version \
+  && pip --version 2>&1 | grep "python 2\.7" \
   && echo "Done symlinking /miniconda/bin/python2.7"
+
 
 # # Compile newer OpenBlas from source
 # RUN cd /tmp \
