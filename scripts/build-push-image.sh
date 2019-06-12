@@ -31,9 +31,9 @@ fi
 BUILD_LEVEL="${1}"
 
 if [ "${BUILD_LEVEL}" == "2" ]; then
-  _target_repo="elgalu/pytorch-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}"
+  _target_repo="elgalu/pytorch-1.1.0-gpu-py2:${TRAVIS_BUILD_NUMBER}"
 else
-  _target_repo="elgalu/pytorch-base${BUILD_LEVEL}-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}"
+  _target_repo="elgalu/pytorch-base${BUILD_LEVEL}-1.1.0-gpu-py2:${TRAVIS_BUILD_NUMBER}"
 fi
 
 # touch local_build.log
@@ -41,7 +41,7 @@ fi
 
 # We need to send the output to a log file because Travis has a 10k log limit
 docker build --squash -t "${_target_repo}" \
-  -f "docker/Dockerfile.${BUILD_LEVEL}.gpu" \
+  -f "docker/py2/Dockerfile.${BUILD_LEVEL}.gpu" \
   --build-arg CUDA_BASE_VER=${CUDA_BASE_VER} \
   --build-arg CUDA_BASE_VER_NO_DOTS=${CUDA_BASE_VER_NO_DOTS} \
   --build-arg TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER} \
@@ -61,7 +61,7 @@ set -xe
 
 # tail -n 20 local_build.log
 
-# https://cloud.docker.com/repository/docker/elgalu/pytorch-base-1.1.0-gpu-py3/general
+# https://cloud.docker.com/repository/docker/elgalu/pytorch-base-1.1.0-gpu-py2/general
 docker push "${_target_repo}"
 
 docker images

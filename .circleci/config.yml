@@ -19,7 +19,7 @@ jobs:
             sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
             sudo service docker restart
             export TRAVIS_BUILD_NUMBER="${CIRCLE_WORKFLOW_ID}"
-            ./scripts/build-push-image.sh 0
+            echo "Skip: ./scripts/build-push-image.sh 0"
 
   base1:
     machine:
@@ -40,7 +40,7 @@ jobs:
             sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
             sudo service docker restart
             export TRAVIS_BUILD_NUMBER="${CIRCLE_WORKFLOW_ID}"
-            ./scripts/build-push-image.sh 1
+            echo "Skip: ./scripts/build-push-image.sh 1"
 
   final:
     machine:

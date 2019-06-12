@@ -56,7 +56,7 @@ RUN echo "Setting time zone to '${TZ}'" \
 
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/cuda/lib:/usr/local/lib" \
     CPLUS_INCLUDE_PATH="/usr/local/cuda/include" \
-    CMAKE_VER="3.14.3"
+    CMAKE_VER="3.14.5"
 
 # Install python and nginx
 # Compile PyTorch from sources. Compiling notes:
@@ -125,12 +125,12 @@ RUN cd /tmp \
   && make install \
   && cd /tmp \
   && rm -rf /tmp/Open* \
-  && apt -qyy install --no-install-recommends \
-        'python3.7-dev' \
+  # && apt -qyy install --no-install-recommends \
+  #       'python3.7-dev' \
   && apt -qqy autoremove \
   && ln -s -f /usr/bin/python3.7 /usr/bin/python \
   && python --version \
-  && python --version 2>&1 | grep "3\.7\.3" \
+  && python --version 2>&1 | grep "2\.7\.16" \
   && nvcc --version \
   && curl -O "https://bootstrap.pypa.io/get-pip.py" \
   && python get-pip.py \
@@ -138,7 +138,7 @@ RUN cd /tmp \
   && ln -s -f /usr/local/bin/pip /usr/bin/pip \
   && ls -lah --color='always' /usr/bin/pip* \
   && pip --version \
-  && pip --version 2>&1 | grep "python 3\.7" \
+  && pip --version 2>&1 | grep "python 2\.7" \
   && pip install --no-cache-dir \
         'torch==1.1.0' \
         'torchvision==0.3.0' \

@@ -19,8 +19,9 @@ This project is based on [sagemaker-pytorch-container](https://github.com/aws/sa
 ### Build the base images
 The "base" Dockerfile takes care of compiling all required up-to-date packages which is incredible time consuming.
 
-    docker build -t elgalu/pytorch-base0-1.1.0-gpu-py3:local -f docker/Dockerfile.0.gpu .
-    docker build -t elgalu/pytorch-base1-1.1.0-gpu-py3:local -f docker/Dockerfile.1.gpu .
+    docker build -t elgalu/pytorch-base0-1.1.0-gpu-py3:local -f docker/py3/Dockerfile.0.gpu .
+    docker build -t elgalu/pytorch-base1-1.1.0-gpu-py3:local -f docker/py3/Dockerfile.1.gpu .
+    docker build -t elgalu/pytorch-base1-1.1.0-gpu-py3:local -f docker/py3/Dockerfile.2.gpu .
 
 ### Build the wheel
 The "final" Dockerfile encompass the installation of the SageMaker specific support code.
@@ -32,7 +33,7 @@ Change `AWS_ACCOUNT_NUMBER` accordingly.
 
     AWS_ACCOUNT_NUMBER=012345678901
     img="${AWS_ACCOUNT_NUMBER}.dkr.ecr.eu-central-1.amazonaws.com/sagemaker-pytorch-1.1.0-gpu-py3:cu101"
-    docker build -t ${img} -f docker/Dockerfile.2.gpu .
+    docker build -t ${img} -f docker/py3/Dockerfile.2.gpu .
 
 ### Push the final image
 Change `AWS_ACCOUNT_NUMBER` accordingly.
