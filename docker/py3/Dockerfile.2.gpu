@@ -2,8 +2,6 @@ ARG TRAVIS_BUILD_NUMBER="local"
 
 FROM elgalu/pytorch-base1-1.1.0-gpu-py3:${TRAVIS_BUILD_NUMBER}
 
-LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true
-
 # Upgrade PyTorch and compile with current CUDA version
 RUN cd /tmp \
   && echo "Continue building PyTorch ..." \
